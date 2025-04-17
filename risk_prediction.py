@@ -3,9 +3,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 from sklearn.preprocessing import LabelEncoder
+import joblib  # <-- NEW
 
 # === 1. Load Dataset ===
-data = pd.read_csv("DrLim1000Synthetic.csv")
+data = pd.read_csv("data/DrLim1000Synthetic.csv")
 
 # === 2. Encode Categorical Features ===
 label_cols = ['Gender', 'Insulin_Regimen', 'CKD_Stage']
@@ -18,7 +19,7 @@ features = [
     'Age', 'Gender', 'Duration_DM', 'Insulin_Regimen', 'DDS_1st',
     'HbA1c', 'Freq_SMBG', 'Freq_Hypo', 'Freq_Visits', 'eGFR', 'CKD_Stage'
 ]
-target = 'HbA1c'  # Changed from Predicted_HbA1C due to constant values
+target = 'HbA1c'
 
 X = data[features]
 y = data[target]
@@ -39,3 +40,7 @@ print(f"\n📉 Mean Absolute Error (MAE): {mae:.3f}")
 importances = pd.Series(model.feature_importances_, index=features).sort_values(ascending=False)
 print("\n📈 Top Feature Importances:")
 print(importances.head(10))
+
+# === 8. Save Model ===
+joblib.dump(model, "risk_model_rf.pkl")
+print("\n✅ Model saved as 'risk_model_rf.pkl'")
